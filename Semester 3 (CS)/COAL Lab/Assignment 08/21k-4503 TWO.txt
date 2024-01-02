@@ -1,0 +1,225 @@
+
+21K-4503
+
+QUESTION 05
+
+INCLUDE Irvine32.inc
+.data
+arr WORD 10, 4,7,14,299,156,3,19,29,300,20
+var WORD 0
+str2 BYTE "Enter number: ",0
+str1 BYTE "Found ",0
+str3 BYTE "Not Found ",0
+.code
+main PROC
+
+mov edx, OFFSET str2
+CALL WriteString
+CALL ReadInt
+mov var, ax
+
+mov ecx, LENGTHOF arr
+mov esi, 0
+l1:
+	cmp ax, arr[esi]
+	JNE target
+	mov edx, OFFSET str1
+	CALL WriteString
+	JMP T1
+	target:
+add esi, 2
+loop l1
+	mov edx, OFFSET str3
+	CALL WriteString
+T1:
+
+exit
+main ENDP
+end main
+
+
+QUESTION 06
+
+INCLUDE Irvine32.inc
+.data
+array1 DWORD 10,4,7,14,299,156,19,29,300
+temp DWORD ?
+char1 DWORD "  "
+
+.code
+main PROC
+
+mov ecx, LENGTHOF array1
+dec ecx
+mov esi, OFFSET array1
+
+L1:
+mov ebx, ecx
+mov ecx, LENGTHOF array1
+sub ecx, ebx
+mov esi, OFFSET array1
+
+L2:
+mov eax, [esi]
+cmp eax, [esi+4]
+jl common
+mov edx, [esi+4]
+mov [esi], edx
+mov [esi+4], eax
+
+common:
+add esi, 4
+LOOP L2
+mov ecx, ebx
+LOOP L1
+
+mov esi, OFFSET array1
+mov ecx, LENGTHOF array1
+L3:
+mov eax, [esi]
+call WriteDec
+mov eax, char1
+call WriteChar
+add esi, 4
+LOOP L3
+
+exit
+main ENDP
+END main
+
+QUESTION 07
+
+INCLUDE Irvine32.inc
+
+.data
+
+str1 BYTE "Monday",0
+str2 BYTE "Tuesday",0
+str3 BYTE "Wednesday",0
+str4 BYTE "Thursday",0
+str5 BYTE "Friday",0
+str6 BYTE "Saturday",0
+str7 BYTE "Sunday", 0
+
+str10 BYTE "Enter a number: ",0
+str11 BYTE "END OF THE PROGRAM!",0
+val DWORD ?
+
+.code
+main PROC
+
+mov edx, OFFSET str10
+CALL WriteString
+CALL ReadInt
+
+mov val, eax
+
+cmp eax, 1
+JE T1
+cmp eax, 2
+JE T2
+cmp eax, 3
+JE T3
+cmp eax, 4
+JE T4
+cmp eax, 5
+JE T5
+cmp eax, 6
+JE T6
+cmp eax, 7
+JE T7
+
+JMP ENDD
+
+T1:
+mov edx, OFFSET str1
+CALL WriteString
+JMP ENDD
+
+T2:
+mov edx, OFFSET str2
+CALL WriteString
+JMP ENDD
+
+T3:
+mov edx, OFFSET str3
+CALL WriteString
+JMP ENDD
+
+T4:
+mov edx, OFFSET str4
+CALL WriteString
+JMP ENDD
+
+T5:
+mov edx, OFFSET str5
+CALL WriteString
+JMP ENDD
+
+T6:
+mov edx, OFFSET str6
+CALL WriteString
+JMP ENDD
+
+T7:
+mov edx, OFFSET str7
+CALL WriteString
+JMP ENDD
+
+ENDD:
+CALL CRLF
+CALL CRLF
+mov edx, OFFSET str11
+CALL WriteString
+
+exit
+main ENDP
+end main
+
+QUESTION 8
+
+INCLUDE Irvine32.inc
+.data 
+str1 byte "Enter the char: ",0
+charr byte ?
+str2 byte "alphabet.",0
+str3 byte " not alphabet.",0
+.code
+main PROC
+mov edx,offset str1
+call writestring
+call readchar
+call writechar
+call crlf
+mov charr,al
+
+cmp charr,'a'
+jge t1
+jmp print
+
+t1:
+	cmp character,'z'
+	jle t2
+	jmp print
+
+t2:
+	cmp character,'A'
+	jge t3
+	jmp print
+
+t3:
+	cmp character,'Z'
+	jle	t
+
+t:
+	mov edx,offset str1
+	call writestring
+	exit
+
+print:
+mov edx,offset str2
+call writestring
+exit
+
+main ENDP
+end main

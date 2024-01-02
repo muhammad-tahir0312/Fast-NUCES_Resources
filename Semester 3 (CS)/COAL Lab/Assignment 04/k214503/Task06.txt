@@ -1,0 +1,16 @@
+Question#06
+
+INCLUDE IRVINE32.inc
+.DATA
+SecondsInDay EQU <24 * 60 * 60>
+var DWORD SecondsInDay
+.CODE
+main PROC
+
+mov ebx, 0
+mov ebx, var
+
+call DUMPREGS
+exit
+main ENDP
+END main

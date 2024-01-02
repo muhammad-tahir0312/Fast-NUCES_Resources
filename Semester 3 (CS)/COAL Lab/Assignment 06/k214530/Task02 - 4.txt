@@ -1,0 +1,28 @@
+INCLUDE Irvine32.inc
+
+.code
+main PROC
+   
+mov ecx, 4
+ 
+
+l1:
+mov edx, ecx
+mov eax, 1
+
+l2:
+
+call WriteDec
+inc eax
+cmp ecx, edx
+JG l2
+loop l2
+
+call Crlf
+mov ecx, edx
+loop l1
+
+
+exit
+main ENDP
+END main

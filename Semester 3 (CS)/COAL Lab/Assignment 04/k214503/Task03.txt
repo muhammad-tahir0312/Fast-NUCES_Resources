@@ -1,0 +1,23 @@
+Question#03
+
+INCLUDE IRVINE32.inc
+.DATA
+varB BYTE +10d
+varW WORD -150d
+varD DWORD 600d
+.CODE
+main PROC
+
+mov eax, 0
+mov al, varB
+
+mov ebx, 0
+mov bx, varW
+
+mov ecx, 0
+mov ecx, varD
+
+call DUMPREGS
+exit
+main ENDP
+END main

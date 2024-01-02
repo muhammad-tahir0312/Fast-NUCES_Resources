@@ -1,0 +1,20 @@
+INCLUDE Irvine32.inc
+.Data
+
+color BYTE "RED", 0
+A WORD 12
+B WORD 2
+c1 WORD 13
+D WORD 8
+E WORD 14
+
+.code
+
+main PROC
+
+mov eax, 0
+
+call DumpRegs
+exit
+main ENDP
+END main

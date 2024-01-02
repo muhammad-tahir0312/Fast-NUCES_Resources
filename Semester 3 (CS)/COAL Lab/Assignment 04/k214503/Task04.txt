@@ -1,0 +1,45 @@
+Question#04
+PART A
+
+INCLUDE IRVINE32.inc
+.CODE
+main PROC
+
+mov eax, 0
+mov eax, 89d
+add eax, 75Fh
+sub eax, 46o
+sub eax, 28d
+add eax, 1101b
+
+
+call DUMPREGS
+exit
+main ENDP
+END main
+
+PART B
+
+INCLUDE IRVINE32.inc
+.DATA
+Val1 DWORD 25h
+Val2 BYTE 36o
+Val3 WORD 20d
+.CODE
+main PROC
+
+mov eax, 0
+mov ebx, 0
+
+mov eax, Val1
+movzx ebx, Val2
+add eax, ebx
+sub eax, 654h
+movzx ebx, Val3
+add eax, ebx
+
+
+call DUMPREGS
+exit
+main ENDP
+END main

@@ -1,0 +1,13 @@
+INCLUDE Irvine32.inc
+.Data
+val1 SWORD ?
+val2 SBYTE -11
+.code
+main PROC
+
+mov eax, 0
+
+call DumpRegs
+exit
+main ENDP
+END main

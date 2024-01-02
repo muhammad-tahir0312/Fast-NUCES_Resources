@@ -1,0 +1,46 @@
+INCLUDE Irvine32.inc
+.data
+array1 DWORD 8, 5,1,2,6
+temp DWORD ?
+char1 DWORD "  "
+
+.code
+main PROC
+
+mov ecx, LENGTHOF array1
+dec ecx
+mov esi, OFFSET array1
+
+L1:
+mov ebx, ecx
+mov ecx, LENGTHOF array1
+sub ecx, ebx
+mov esi, OFFSET array1
+
+L2:
+mov eax, [esi]
+cmp eax, [esi+4]
+jl common
+mov edx, [esi+4]
+mov [esi], edx
+mov [esi+4], eax
+
+common:
+add esi, 4
+LOOP L2
+mov ecx, ebx
+LOOP L1
+
+mov esi, OFFSET array1
+mov ecx, 5
+L3:
+mov eax, [esi]
+call WriteDec
+mov eax, char1
+call WriteChar
+add esi, 4
+LOOP L3
+
+exit
+main ENDP
+END main

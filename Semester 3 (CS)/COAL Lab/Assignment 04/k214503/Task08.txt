@@ -1,0 +1,28 @@
+Question#08
+
+INCLUDE IRVINE32.inc
+.DATA
+var1 BYTE 10h
+VAR2 WORD 8000h
+var3 DWORD 0FFFFh
+var4 WORD 7FFFh
+.CODE
+main PROC
+
+mov cx, var2 
+INC cx
+
+mov eax, 0
+sub eax, var3
+
+mov ebx, 0
+mov ecx, 0
+
+mov bx, var2
+sub bx, var4
+
+
+call DUMPREGS
+exit
+main ENDP
+END main

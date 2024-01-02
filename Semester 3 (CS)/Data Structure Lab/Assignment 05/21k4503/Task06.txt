@@ -1,0 +1,2 @@
+SELECTION SORT should be use by the clerk as it only requires O(N), 
+Large records does not require much swapping or exchanging.

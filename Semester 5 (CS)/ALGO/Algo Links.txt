@@ -1,0 +1,15 @@
+NP 
+
+MIN Vertex cover NPC:  https://youtu.be/u5rqrQqGk3E?si=iRg30OkdA0850DEy
+TSP NPC: https://www.youtube.com/watch?v=M5UggIrAOME
+Set cover NPC: https://www.youtube.com/watch?v=wD2R53E0iqA
+using satify to prove cliqe size NPC: https://youtu.be/qZs767KQcvE?si=tP_iuFOHOpg1XISv
+using satify to prove independent set NPC: https://www.youtube.com/watch?v=lTqTk9AQR5s
+
+Graph
+
+Floyd Warshall: https://www.youtube.com/watch?v=oNI0rf2P9gE&list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O&index=50
+Bellman Ford & Dijkstra: https://www.youtube.com/watch?v=FtN3BYH2Zes&list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O&index=54
+BFS & DFS : https://www.youtube.com/watch?v=pcKY4hjDrxk&list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O&index=62
+Prims Binary Min Heap: https://www.youtube.com/watch?v=j5TbbNrXchs&t=9s
+Kruskal Naive/  : https://www.youtube.com/watch?v=AbpiPXOmGUw

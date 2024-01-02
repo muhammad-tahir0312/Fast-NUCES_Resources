@@ -1,0 +1,9 @@
+	
+				MCQs
+1. An inverter performs a NOT operation.                                           TRUE
+2. A NOT gate cannot have more than one input.                                     TRUE
+3. If any input to an OR gate is zero, the output is zero.                         FALSE
+4. If all inputs to an AND gate are 1, the output is 0.                            FALSE
+5. A NAND gate can be considered as an AND gate followed by a NOT gate.            TRUE
+6. A NOR gate can be considered as an OR gate followed by an inverter.             TRUE
+7. The output of an exclusive-OR is 0 if the inputs are opposite.                  FALSE

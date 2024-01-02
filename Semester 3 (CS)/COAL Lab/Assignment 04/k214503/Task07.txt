@@ -1,0 +1,19 @@
+Question#07
+
+INCLUDE IRVINE32.inc
+.DATA
+A = 0FF10h
+B = 0E10Bh
+.CODE
+main PROC
+
+mov eax, A
+mov ebx, B
+
+XCHG eax, ebx
+
+
+call DUMPREGS
+exit
+main ENDP
+END main

@@ -1,0 +1,69 @@
+INCLUDE Irvine32.inc
+.data
+s1 BYTE "Enter Employee Name : ",0
+s2 BYTE "Enter Employe ID: ",0
+s3 BYTE "Enter Employee Salary : ",0
+s4 BYTE "Enter Employee YEAR OF BIRTH : ",0
+s5 BYTE "Total Salaries of All Employes is : ",0
+
+ID DWORD 5 DUP(?)
+Salary DWORD 5 DUP(?)
+empname byte 500 DUP(?)
+Year DWORD 5 DUP(?)
+
+temp DWORD ?
+.code
+main PROC 
+mov ecx,0
+mov ecx,5
+mov esi,0
+
+L1:
+mov temp,ecx
+
+mov edx,OFFSET s1
+call WriteString
+mov edx,OFFSET empname
+call ReadString
+		
+		
+mov edx,OFFSET s2
+call WriteString
+call ReadInt
+mov ID[esi*4],eax
+
+mov edx,OFFSET s3
+call WriteString
+call ReadInt
+mov Salary[esi*4],eax
+
+mov edx,OFFSET s4
+call WriteString
+call ReadInt
+mov Year[esi*4],eax
+
+inc esi
+mov ecx,temp
+call crlf
+
+Loop L1
+
+mov esi,0
+mov ecx,5
+mov eax,0
+
+L2:
+add eax,salary[esi*4]
+inc esi
+Loop L2
+	
+call crlf
+mov edx,OFFSET s5
+call writestring
+call writedec
+call crlf
+call crlf
+
+exit
+main ENDP
+END main

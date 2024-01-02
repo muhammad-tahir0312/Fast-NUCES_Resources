@@ -1,0 +1,14 @@
+INCLUDE Irvine32.inc
+.Data
+
+val3 SDWORD -2147483647
+
+.code
+main PROC
+
+mov eax, 0
+
+call DumpRegs
+exit
+main ENDP
+END main

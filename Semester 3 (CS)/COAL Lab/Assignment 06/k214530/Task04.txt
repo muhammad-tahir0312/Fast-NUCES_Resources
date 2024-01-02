@@ -1,0 +1,23 @@
+INCLUDE Irvine32.inc
+.data
+
+source BYTE "TAHIR" 
+target BYTE 5 DUP(0)
+
+.code
+main PROC
+   
+mov ecx, LENGTHOF source
+mov esi, 0
+
+l1:
+	mov al, source[esi]
+	mov target, al
+	inc esi
+	call writechar
+loop l1
+call crlf
+call dumpregs
+exit
+main ENDP
+END main

@@ -1,0 +1,18 @@
+Question#02
+
+INCLUDE IRVINE32.inc
+.DATA
+string EQU <"Tah",0>
+arr BYTE string
+.CODE
+main PROC
+
+mov eax, 0
+mov al, arr+2
+
+
+call DUMPREGS
+exit
+main ENDP
+END main
+

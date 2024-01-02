@@ -1,0 +1,68 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    font-family: "Times new roman";
+    background-image: url(30005.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.signing-form
+{
+    width: 30%;
+    box-shadow: black;
+    background: white;
+    padding: 20px;
+    margin: 8% auto 0;
+    text-align: center;
+}
+.signing-form h1
+{
+    color:black;
+}
+.input-box
+{
+    
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px 0;
+    width:90%;
+    border: black;
+    background-color:cadetblue;
+    color:black;
+}
+button
+{
+        width: 40%;
+        padding:10px;
+        margin: 10px o;
+        border-radius: 20px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        color: black;
+}
+.sign-up-btn
+{
+    background-color:rgb(19, 62, 182);
+}
+.signin-fb
+{
+    background-color: blue;
+}
+hr{
+    margin-top: 20px;
+    width: 80%
+}
+.or
+{
+    background: white;
+    width:22px;
+    margin:-19px auto 10px;
+}
+img
+{
+    width: 70px;
+    height: 70px;
+    margin-top: -50px;
+}

@@ -1,0 +1,31 @@
+INCLUDE Irvine32.inc
+
+.data
+    array1 DWORD 10d,20d,30d,40d,50d,60d,70d,80d,90d
+.code
+main PROC
+        mov ESI, OFFSET array1  
+        mov EDI, SIZEOF array1
+        add EDI, OFFSET array1
+        sub EDI, TYPE array1    
+
+        mov ECX, LENGTHOF array1
+        shr ECX, 1     
+L1:     mov EAX, [ESI]         
+        mov EBX, [EDI]
+        mov [EDI],EAX
+        mov [ESI],EBX
+        add ESI, TYPE array1
+        sub EDI, TYPE array1
+        LOOP L1
+
+        mov ECX, LENGTHOF array1
+        mov ESI, OFFSET array1
+L2:     MOV EAX, [ESI]
+        call WriteDec
+        call Crlf
+        add ESI, TYPE array1
+        LOOP L2
+        exit        
+main ENDP
+END main

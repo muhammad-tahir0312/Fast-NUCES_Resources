@@ -1,0 +1,14 @@
+INCLUDE Irvine32.inc
+.Data
+
+val4 WORD 1,2,3 
+
+.code
+main PROC
+
+mov eax, 0
+
+call DumpRegs
+exit
+main ENDP
+END main

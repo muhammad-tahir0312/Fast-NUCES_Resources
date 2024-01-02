@@ -1,0 +1,556 @@
+INCLUDE Irvine32.inc
+
+BubbleSort PROTO , pArray:PTR DWORD, Count:DWORD 
+
+
+.data
+
+;PROMPTS
+WMsg BYTE "WELCOME TO THE ATM SYSTEM ",0
+tab1 BYTE "                                       ",0
+tab2 BYTE "                    ",0
+tab3 BYTE "     ",0
+tab4 BYTE "               ",0
+OK BYTE  "OK",0
+WrongCr BYTE "WRONG CREDENTIALS, PLEASE RE-ENTER CORRECT CREDENTIALS",0
+COUNT1 BYTE 1
+accessDenied BYTE "ATTEMPTS LIMIT EXCEEDED, ACCESS DENIED ",0
+WrongOp BYTE "WRONG OPTIONS, PLEASE RE-ENTER CORRECT OPTIONS",0
+EnterAmount BYTE "ENTER THE AMOUNT:  ",0
+InsufficientBalance  BYTE "INSUFFICIENT BALANCE TO WITHDRAW, PLEASE RE-ENTER AMOUNT",0
+ShowBalance BYTE "YOUR REMIANING BALANCE IS:  Rs.",0
+InputTransferID BYTE "TO TRANSFER CASH, ENTER THE RECEPIENTS ID: ",0
+IDnotExist BYTE "THE ENTERED ID DOES NOT EXIST: ",0
+SuccessfulTransfer BYTE "SUCCESSFUL TRANSFER OF CASH",0
+CustomerData BYTE "DATA OF BANK CUTOMERS",0
+BalBeforeTransfer BYTE "YOUR BALANCE BEFORE TRANSFER Rs. ",0
+TransferredUser BYTE "IF THE USER TO WHOM THE MONEY WAS TRANSFERRED WOULD LIKE TO VIEW BALANCE, THEN PLEASE ENTER [y]",0
+subHeading BYTE "Customer IDs        Balance (Rs)",0
+t1 BYTE "DO YOU WANT TO CONTINUE: ",0
+t2 BYTE "ATM",0
+;bubble sort
+prompt Byte "Sorted array: ", 0
+prompt1 Byte "Unsorted array: ", 0
+spacy byte "	", 0
+
+
+;CREDENTIALS
+ID BYTE "ENTER YOUR ID:  ",0
+PW BYTE "ENTER YOUR PASSWORD:  ",0
+IDInput DWORD ?
+PWInput DWORD ?
+
+;USER DETAILS
+NumberOfUsers = 5
+UserIDs DWORD 55642,55346,55986,55234,55678
+UserPWs DWORD 3258,6453,9683,7364,2453
+UserBal DWORD 150000,250000,650000,750000,20000
+
+;CurrentUser
+CurrentUser DWORD ?
+CurrentOption BYTE ?
+TransferUser DWORD ?
+TransferAmount DWORD ?
+
+;MAIN OPTIONS
+mainOptions BYTE "KINDLY CHOOSE FROM AVAILABLE OPTIONS:",0
+withdrawOption BYTE "a. Withdraw Cash",0
+depositOption  BYTE  "b. Deposit Cash",0
+transferOption  BYTE  "c. Transfer Cash",0
+DisplayCurrentBalance  BYTE  "d. Display Current Balance ",0
+
+
+
+
+.code
+main PROC
+
+mov eax, 13 + (15*16)
+call SetTextColor
+call DisplayWMsg
+DoWhile:
+    
+call crlf ;welcome msg
+call WaitMsg
+
+call clrscr
+call InputCredentials
+call DisplayMainOptions
+
+
+call crlf
+mov edx,OFFSET t1
+mov ebx,OFFSET t2
+call MsgBoxAsk
+cmp eax,7
+JE tt
+JMP DoWhile
+tt:
+
+
+
+exit
+main ENDP
+
+
+
+
+
+; ----------------------------------------------------------------------------------
+;DISPLAY WELCOME MSG
+DisplayWMsg PROC
+
+mov edx,0
+mov dh,13
+mov dl,35
+call Gotoxy
+mov edx,OFFSET WMsg
+call WriteString
+
+ret
+DisplayWMsg ENDP
+
+; ----------------------------------------------------------------------------------s
+;INPUT USER CREDENTIALS
+InputCredentials PROC
+call crlf
+mov edx,OFFSET tab3
+call WriteString
+
+mov edx,OFFSET ID
+call WriteString
+call ReadDec
+mov IDInput,eax
+
+mov edx,OFFSET tab3
+call WriteString
+
+mov edx,OFFSET PW
+call WriteString
+call ReadDec
+mov PWInput,eax
+call crlf
+
+call VerifyCredentials            ;nested procedure
+ret
+InputCredentials ENDP
+
+; ----------------------------------------------------------------------------------
+VerifyCredentials PROC USES eax ebx esi edx
+;check ID
+mov esi, 0
+mov ecx,LENGTHOF UserIDs
+
+IdCheck:
+mov eax, UserIDs[esi]
+cmp IDInput,eax
+JE PwCheck
+add esi,4
+Loop IdCheck
+JMP wrongCredentials
+
+;check password
+PwCheck:
+mov ebx,UserPWs[esi]
+cmp PWInput, ebx
+JNE wrongCredentials
+mov edx,OFFSET OK
+call WriteString
+JMP next
+
+wrongCredentials:
+cmp COUNT1,3
+JAE accessDenial
+
+mov edx,OFFSET WrongCr
+call WriteString
+inc COUNT1
+call InputCredentials
+JMP next
+
+accessDenial:
+mov edx,OFFSET accessDenied
+call WriteString
+exit
+
+next:
+mov CurrentUser, esi
+ret
+VerifyCredentials ENDP
+
+; ----------------------------------------------------------------------------------
+;DISPLAY MAIN OPTIONS
+DisplayMainOptions PROC USES edx eax
+
+   call clrscr
+
+mov edx,OFFSET mainOptions
+call WriteString
+call crlf
+
+mov edx, OFFSET tab2
+call WriteString
+mov edx,OFFSET  withdrawOption
+call WriteString
+call crlf
+
+mov edx, OFFSET tab2
+call WriteString
+mov edx,OFFSET  depositOption  
+call WriteString
+call crlf
+
+mov edx, OFFSET tab2
+call WriteString
+mov edx,OFFSET  transferOption  
+call WriteString
+call crlf
+
+mov edx, OFFSET tab2
+call WriteString
+mov edx,OFFSET  DisplayCurrentBalance  
+call WriteString
+call crlf
+
+call ReadChar
+mov CurrentOption,al
+
+call clrscr
+
+cmp al,'a'
+JE withdraw
+
+cmp al,'b'
+JE deposit
+
+cmp al,'c'
+JE transfer
+
+cmp al,'d'
+JE display
+
+WrongOptions:
+mov edx,OFFSET WrongOp  
+call WriteString
+call DisplayMainOptions
+
+withdraw:
+call WithdrawCash
+jmp next
+
+deposit:
+call DepositCash
+jmp next
+
+transfer:
+call TransferCash
+jmp next
+
+display:
+call PrintCustomerDetails
+call ArraySort
+
+next:
+ret
+DisplayMainOptions ENDP
+
+
+; ----------------------------------------------------------------------------------
+; withdraw cash
+WithDrawCash PROC USES eax edx ebx esi
+
+mov edx,OFFSET EnterAmount  
+call WriteString
+call ReadDec
+
+mov esi, CurrentUser
+mov ebx, UserBal[esi]
+cmp eax, ebx
+ja InsufficientAmount
+jmp next
+
+InsufficientAmount:
+mov edx,OFFSET InsufficientBalance
+call WriteString
+call WithDrawCash
+
+next:
+mov esi, CurrentUser
+sub UserBal[esi], eax
+call DisplayBalance  
+
+ret
+WithDrawCash ENDP
+
+
+; deposit cash
+DepositCash PROC
+
+mov edx,OFFSET EnterAmount  
+call WriteString
+call ReadDec
+
+mov esi, CurrentUser
+mov ebx, UserBal[esi]
+
+
+next:
+mov esi, CurrentUser
+add UserBal[esi], eax
+call DisplayBalance  
+ret
+DepositCash ENDP
+
+; ----------------------------------------------------------------------------------
+; Transfer cash
+
+TransferCash PROC
+
+;Transfer amount
+mov edx,OFFSET EnterAmount  
+call WriteString
+call ReadDec
+mov TransferAmount, eax
+
+mov esi, CurrentUser
+mov ebx, UserBal[esi]
+cmp eax, ebx
+ja InsufficientAmount
+jmp next
+
+InsufficientAmount:
+mov edx,OFFSET InsufficientBalance
+call WriteString
+jmp return
+
+next:
+mov esi, CurrentUser
+sub UserBal[esi], eax
+call crlf
+call DisplayBalance  
+
+call crlf
+;transfer id
+mov edx,OFFSET InputTransferID
+call WriteString
+call ReadDec
+;mov IDInput, eax
+mov esi,0
+
+IdCheck:
+mov ebx, UserIDs[esi]
+cmp eax,ebx
+JE transferToUser
+add esi,4
+Loop IdCheck
+
+;ID DOESNT EXIST
+mov edx,OFFSET IDnotExist  
+call WriteString
+jmp return
+
+transferToUser:
+;mov TransferUser,esi
+mov ecx, UserBal[esi]
+mov ebx, TransferAmount
+add UserBal[esi], ebx
+
+call crlf
+mov edx,OFFSET SuccessfulTransfer  
+call WriteString
+call crlf
+call crlf
+call crlf
+
+ForTransferredUser:
+    mov edx, OFFSET TransferredUser
+    call WriteString
+    call ReadChar
+
+    cmp al, 'y'
+    jne return
+
+    call crlf
+    mov edx, OFFSET PW
+    call WriteString
+    call ReadDec
+    call crlf
+
+    cmp eax, UserPWs[esi]
+    jne continue
+
+    mov edx, OFFSET BalBeforeTransfer
+    call WriteString
+    mov eax, ecx
+    call WriteDec
+
+    call CRLF
+    mov edx, OFFSET ShowBalance
+    call WriteString
+    mov eax, UserBal[esi]
+    call WriteDec
+    jmp return 
+
+    continue:
+    mov edx, OFFSET WrongCr
+    call WriteString
+    jmp ForTransferredUser
+
+return:
+ret
+TransferCash ENDP
+
+
+; ----------------------------------------------------------------------------------
+;display current balance
+
+DisplayBalance PROC USES esi edx
+
+call crlf
+mov edx, OFFSET ShowBalance  
+call WriteString
+
+mov esi, CurrentUser
+mov eax, UserBal[esi]
+call WriteDec
+
+
+ret
+DisplayBalance ENDP
+
+
+; ----------------------------------------------------------------------------------
+;print users
+PrintCustomerDetails PROC
+
+    call clrscr
+
+    mov edx, OFFSET tab3
+    call WriteString
+
+    mov edx, OFFSET CustomerData
+    call WriteString
+    call crlf
+    call crlf
+
+mov edx, OFFSET subHeading
+    call WriteString
+call crlf
+
+    mov ecx, NumberOfUsers
+    mov esi,0
+
+    Display:
+
+        mov eax, UserIDs[esi]
+        call WriteDec
+        mov edx, OFFSET tab4
+        call WriteString
+
+        mov eax, UserBal[esi]
+        call WriteDec
+
+        call crlf
+        add esi, 4
+    Loop Display
+       
+ret
+PrintCustomerDetails ENDP
+
+
+BubbleSort PROTO , pArray:PTR DWORD, Count:DWORD 
+
+
+	
+
+
+
+
+arraySort PROC
+
+mov edx, offset prompt1
+	call writestring
+call crlf
+call crlf
+	mov esi, offset UserBal
+	mov ecx, NumberOfUsers
+	s1:
+		mov eax, [esi]
+		call writedec
+        call crlf
+		;mov edx, offset spacy
+		;call writestring
+		add esi, type UserBal
+	loop s1
+	
+call crlf
+call crlf
+
+	invoke BubbleSort, ADDR UserBal, NumberOfUsers 
+	mov edx, offset prompt
+	call writestring
+	call crlf
+    call crlf
+	mov esi, offset UserBal
+	mov ecx, NumberOfUsers
+	Lsii:
+		mov eax, [esi]
+		call writedec
+        call crlf
+		;mov edx, offset spacy
+		;call writestring
+		add esi, type UserBal
+	loop Lsii
+	
+call crlf
+call crlf
+
+ret
+arraySort ENDP
+
+BubbleSort PROC USES eax ecx esi, pArray:PTR DWORD , Count:DWORD 
+
+mov ecx,Count
+
+dec ecx
+
+L1:
+
+push ecx
+mov esi,pArray
+
+L2:
+
+mov eax,[esi]
+cmp [esi+4],eax
+jge L3
+xchg eax,[esi+4]
+mov [esi],eax
+
+L3:
+
+add esi,4
+
+loop L2
+
+pop ecx
+
+loop L1
+
+L4:
+ret
+
+BubbleSort ENDP
+
+END main
+
+
+
+
+
+
+
+
+
+
+

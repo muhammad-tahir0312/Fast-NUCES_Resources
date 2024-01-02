@@ -1,0 +1,47 @@
+INCLUDE Irvine32.inc
+.data
+char1 BYTE "    "
+
+.code
+main PROC
+mov ecx, 20
+mov edx, 1
+mov eax, 9
+call RandomRange
+inc eax
+call WriteDec
+mov eax, 9
+call RandomRange
+inc eax
+call WriteDec
+mov eax, 9
+call RandomRange
+inc eax
+call WriteDec
+call Crlf
+L1:
+mov ebx, ecx
+mov ecx, edx
+L2:
+mov eax, 5
+call Delay
+mov al, char1
+call WriteChar
+call WriteChar
+call WriteChar
+LOOP L2
+mov ecx, 3
+L3:
+mov eax, 5
+call Delay
+mov eax, 9
+call RandomRange
+call WriteDec
+LOOP L3
+inc edx
+mov ecx, ebx
+call Crlf
+Loop L1
+exit
+main ENDP
+END main

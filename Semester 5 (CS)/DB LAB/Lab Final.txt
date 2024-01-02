@@ -1,0 +1,200 @@
+                                  TRANSACTION
+to make transaction:
+         set transaction name 'okie';
+to make savepoint:
+         savepoint nameofsavepoint;
+to rollback:
+         rollback to nameofsavepoint;
+to commit:
+         commit;
+
+                                 BASIC SQL 
+ANY:
+
+SELECT ProductName
+FROM Products
+WHERE ProductID = ANY
+  (SELECT ProductID
+  FROM OrderDetails
+  WHERE Quantity = 10);
+
+ALL:
+
+SELECT ProductName
+FROM Products
+WHERE ProductID = ALL
+  (SELECT ProductID
+  FROM OrderDetails
+  WHERE Quantity = 10);
+
+IN:
+
+SELECT * FROM Customers
+WHERE Country IN ('Germany', 'France', 'UK');
+
+LIKE:
+
+Example: List all the employees whose names contains an ‘a’ in their first names.
+SELECT * FROM employees WHERE first_name LIKE ‘%a%’;
+
+Alter (Primary):
+
+ALTER TABLE table1 ADD PRIMARY KEY (column1);
+
+Add constraint:
+
+ALTER TABLE table1 ADD CONSTRAINT const_N PRIMARY KEY(column1, column2);
+
+Drop constraint:
+
+ALTER TABLE table1 DROP CONSTRAINT const_Name;
+
+Modify:
+
+ALTER TABLE Table1 MODIFY Column_Name datatype NOT NULL;
+
+Foreign key:
+
+ALTER TABLE Table1 ADD FOREIGN KEY (ColumnName) REFERENCES Table2
+(ColumnName);
+
+ALTER TABLE Table1 ADD CONSTRAINT CONSTRAIT_Name FOREIGN KEY
+(ColumnName) REFERENCES Table2 (ColumnName);
+
+Check:
+
+ALTER TABLE Table1 ADD CHECK (column condition);
+
+Default:
+
+ALTER TABLE Table1 MODIFY columnName DEFAULT Value;
+ALTER TABLE Table1 MODIFY columnName DEFAULT NULL;
+
+INSERT:
+
+INSERT INTO table_name (column1, column2, column3,..) VALUES (value1, value2,
+value3,..);
+
+UPDATE:
+
+UPDATE table_name SET column1 = value1, column2 = value2,...WHERE condition;
+
+DELETE: 
+
+DELETE FROM table_name WHERE some_condition;
+
+Rename:
+
+ALTER TABLE table_name RENAME TO new_table_name;
+ALTER TABLE table_name RENAME COLUMN old_name TO new_name;
+
+Group by:
+
+SELECT
+    AVG(salary) as “average_salary”
+FROM
+    employees
+GROUP BY Department_id
+
+Group by (Having):
+
+SELECT item, SUM(sale) AS &quot;Total sales&quot;  
+FROM salesdepartment  
+GROUP BY item  
+HAVING SUM(sale) < 1000
+
+CROSS JOIN:
+
+SELECT * FROM TABLE1, TABLE2;
+
+Inner join:
+
+SELECT E.ENAME, E.JOB, D.DNAME FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+
+USING CLAUSE WITH JOIN:
+
+SELECT EMPNO, ENAME, MGR, DNAME FROM EMP JOIN DEPT USING
+(DEPTNO, MGR);
+
+SELF JOIN:
+
+SELECT WORKER.ENAME, MANAGER.ENAME FROM EMP WORKER, EMP
+MANAGER WHERE WORKER.MGR = MANAGER.EMPNO;
+
+Left Join: 
+
+SELECT Customers.CustomerName, Orders.OrderID
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+ORDER BY Customers.CustomerName; //show whole customers
+
+Right Join:
+
+SELECT Orders.OrderID, Employees.LastName, Employees.FirstName
+FROM Orders
+RIGHT JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+ORDER BY Orders.OrderID; //show whole employees
+
+Full Join:
+
+SELECT Customers.CustomerName, Orders.OrderID
+FROM Customers
+FULL OUTER JOIN Orders ON Customers.CustomerID=Orders.CustomerID
+ORDER BY Customers.CustomerName;
+
+Union All:
+
+SELECT employee_id, job_id, department_id FROM employees UNION
+ALL
+SELECT employee_id, job_id, department_id FROM job_history
+
+Union:
+
+SELECT employee_id, job_id, department_id FROM employees UNION
+SELECT employee_id, job_id, department_id FROM job_history
+
+Intersection:
+
+SELECT employee_id, job_id FROM employees INTERSECT SELECT
+employee_id, job_id FROM job_history;
+
+Minus:
+
+This operator returns only unique records of the first table, not the common records of both tables.
+
+SELECT * FROM Old_Worker_Info Minus SELECT * FROM New_Worker_Info;  
+
+CASCADE:
+
+FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
+
+SET NULL:
+
+FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE SET NULL
+
+SET DEFAULT:
+
+FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE SET DEFAULT
+
+                                           MONGO DB
+use mydb
+show dbs
+db.dropdatabase()
+
+mydb> db.createCollection("t1")
+mydb> db.t1.drop()
+
+mydb> db.t1.insert({'key':'value'})
+mydb> db.t1.insert({'key':'value', 'key':[ 'op1', 'op2']})
+mydb> db.t1.insert([{'key':'value'}, {'key':'value'}])
+mydb> db.t1.insert({'date': new Date (year,month,day,min,hr)})
+
+mydb> db.t1.find().pretty()
+mydb> db.t1.find({}, {col1:true, col3:true}, {col2:false}).pretty()
+mydb> db.t1.find({'age': {$gt:30,$lt:100}}).pretty()
+mydb> db.t1.find({{'age':20}, {$or: [{'name':"yasir'},{'name':'amin'}]}}).pretty()
+
+mydb> db.t1.update({'name':'tahir', $set:{'name':'okie'}})
+
+mydb> db.t1.remove/delete('address.zipcode':10)

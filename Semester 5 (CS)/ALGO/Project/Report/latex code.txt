@@ -1,0 +1,127 @@
+\documentclass[a4paper, 10pt, two column]{report}
+% Packages for various functionalities
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{times}
+\usepackage{hyperref}
+\geometry{a4paper, margin=0.75in}
+%\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\begin{document}
+\begin{titlepage}
+    \centering
+    \vspace{3.5cm}
+    \includegraphics[width=0.5\textwidth]{ok.jpg}\par\vspace{1cm}
+    \vspace{1cm}
+    {\scshape\Huge\textbf {Geometric Algorithms} \par}
+    {\scshape\Huge\textbf {(Line Intersection \& Convex Hull)} \par}
+    \vspace{1cm}
+    {\scshape\Large Project Report \par}
+    \vspace{1cm}
+    {\scshape\Large Professor Dr. Farrukh Salim (BCS-5E) \par}
+    \vspace{1cm}
+    {\scshape\Large Design \& Analysis of Algorithms (CS-2009) \par}
+    \vspace{1cm}
+    {\scshape\Large Muhammad Tahir (K21-4503) \\ Insha Javes (K21-3279) \\ Sabika Shameel (K21-4606) \par}
+    \vfill
+    \vspace{1cm}    
+    {Foundation of Advancement of Science and Technology \par}
+    {National University of Computer and Emerging Sciences \par}
+    {Department of Computer Science \par}
+    {Karachi, Pakistan \par}
+\end{titlepage}
+
+\onecolumn
+\begin{abstract}
+This project delves into the realm of geometric algorithms, specifically focusing on the design and implementation of algorithms for Convex Hull construction and Line Intersection detection. The Convex Hull algorithms explored include Brute Force, Jarvis March, Graham Scan, Quick Elimination, and A New Approach Algorithm, each meticulously examined for their distinct steps and interactive features within a user interface. Additionally, Line Intersection methods such as the Cross Product Method, Slope Intersection Method, and CCW Method are implemented with equal scrutiny.
+\end{abstract}
+\tableofcontents
+
+\twocolumn
+\section{Introduction}
+This project explores geometric algorithms, focusing on Convex Hull construction and Line Intersection detection. It includes five Convex Hull algorithms and three Line Intersection methods within an interactive user interface for hands-on learning. Emphasis is placed on analyzing time and space complexities and enhancing accessibility with a user-friendly interface. The goal is to contribute to geometric algorithm knowledge while providing an engaging learning experience.
+
+\section{Programming Design}
+Implemented in C\#, our programming design prioritizes clarity and readability, taking inspiration from a c\# implementation renowned for handling geometric computations. The project incorporates a suite of geometric algorithms, each meticulously chosen for its specific strengths and applications.
+
+In tackling the line segment intersection problem, the implementation explores diverse techniques, including counter-clockwise operations, vector cross products, and the application of parametric equations. Counter-clockwise operations play a crucial role in determining the relative orientation of points, aiding in identifying intersecting line segments. Vector cross-products offer a robust method for evaluating the convexity of polygons formed by these line segments. The utilization of parametric equations enhances efficiency by providing an alternative approach to assessing the intersection points.
+
+Addressing the Convex Hull problem involves a selection of algorithms, each offering unique advantages. The Brute Force algorithm, while computationally intensive, serves as a baseline for comparison, ensuring the correctness of subsequent, more optimized algorithms. Jarvis-March, known for its simplicity, constructs a convex hull based on selecting the point with the smallest polar angle. Graham Scan leverages angular sorting for efficient convex hull construction. Quick Hull, A New Way algorithm, demonstrates efficiency by recursively dividing the point set and constructing convex hulls for each subset. The New Way algorithm, starts firstly with Quick hull and in its second step Graham scan is applied to the remaining points.
+
+In essence, the C\# implementation reflects the thoughtful design and algorithmic exploration observed in the c\# reference, maintaining a focus on clarity, efficiency, and a comprehensive approach to solving geometric problems, now incorporating the use of parametric equations for line segment intersection analysis.
+
+\section{Experimental Setup}
+The experimental setup assesses the performance of implemented geometric algorithms by generating random points to draw diverse objects on the screen. The report outlines each algorithm's steps using these points, providing visual representations and user interaction for a comprehensive understanding.
+
+A key focus is the calculation of time and space complexities for each algorithm. The report details the methodology used, offering insights into computational efficiency. This analysis helps gauge algorithmic performance, revealing strengths and limitations across different scenarios.
+
+\section{Results and Discussion}
+The below table shows the results alongside their time complexity of three of the Line Intersection Algorithms.
+
+\subsection{Line Intersection}
+\begin{center}
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf {Algorithm} & \textbf {Time Taken(s)} \\
+    \hline
+    Counter-Clockwise & 0.00320005\\
+    \hline
+    Vector Cross Product & 0.000365\\
+    \hline
+    Parametric Equation & 0.002537958\\
+    \hline
+  \end{tabular}
+\end{center}
+
+Attached below are the results alongside their time complexity of five of the Convex Hull Algorithms.
+
+\subsection{Convex Hull}
+\begin{center}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf {Algorithm} & \textbf {Time Complexity} & \textbf {Time Taken(s) on N(100)} \\
+    \hline
+    Graham Scan & O($nLog(n)$) & 0.00432353\\
+    \hline
+    Jarvis-March & O($nh$) & 0.31947946\\
+    \hline
+    Quick Elimination & O($nLog(n)$) & 0.735836029\\
+    \hline
+     Brute Force & O($n^3$) & 0.0458802776\\
+    \hline
+     A New Way & O($nLog(n) $) & 0.0015172615\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\section{Insights}
+\textit{Brute Force:} Despite its theoretical inefficiency O(n$^$3), the execution time of 29 seconds underscores its impracticality for large data sets.
+
+\textit{Jarvis March:} With a relatively faster execution time of 0.31947946 seconds, Jarvis March demonstrates improved efficiency compared to Brute Force but is still outperformed by more sophisticated algorithms.
+
+\textit{Graham Scan:} Boasting a time complexity of O(nLogn), Graham Scan executes swiftly in 0.00432353 seconds, showcasing its efficiency for large data sets.
+
+\textit{Quick Elimination:} Exhibiting a time complexity of O(nLogn) on average, Quick Elimination achieves an execution time of 0.735836029 seconds, demonstrating competitive performance but with a potential worst-case scenario of O(n$^$2)
+
+\textit{A New Way Algorithm:} Leading the efficiency frontier with time complexity of O(nLogn), Chan's Algorithm impressively executes in a mere 0.0015172615 seconds, establishing its superiority, especially for large and diverse data sets.
+
+\section{Conclusion}
+The interplay between time complexity and real-world execution time underscores the importance of algorithm selection based on the nature and size of the input data. While Brute Force may be infeasible for large data sets, more sophisticated algorithms like Graham Scan and A New Way's Algorithm showcase remarkable efficiency, laying the foundation for informed algorithmic choices in computational geometry.
+
+\section{References}
+% Your references content here
+\begin{itemize}
+    \item \href{https://www.researchgate.net/publication/236898954_A_new_approach_to_compute_convex_hull}{Researchgate (A New Way Algorithm)}
+    \item \href{https://semisignal.com/brute-force-convex-hull-construction/}{Semisignal (Brute Force Algorithm)}
+    \item \href{https://www.cise.ufl.edu/~sitharam/COURSES/CG/kreveldintrolinesegment.pdf}{CISE (Parametric Equation Algorithm)}
+    \item \href{https://en.wikipedia.org/wiki/Quickhull}{Wikipedia (QuickHull Algorithm)}
+    \item \href{https://www.geeksforgeeks.org/quickhull-algorithm-convex-hull/}{GeekForgeeks (QuickHull Algorithm)}
+    \item \href{Introduction to Algorithms by Thomas H. Cormen}{Introduction to Algorithms by Thomas H. Cormen (Reference Book)}
+\end{itemize}
+
+\end{document}
