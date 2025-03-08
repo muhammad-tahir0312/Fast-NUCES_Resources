@@ -1,5 +1,5 @@
 (If you find it helpful then please give me a STAR)
-<br><br>  Hey, this repo's got everything from the first semester to the fifth! I'll throw in more stuff once I wrap up the rest.
+<br><br>  Hey, this repo's got everything from the first semester to the seventh! I'll throw in more stuff once I wrap up the rest.
 <br> 
 <br> 
 Campus: Fast Karachi
