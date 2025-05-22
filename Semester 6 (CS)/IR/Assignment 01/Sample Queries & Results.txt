@@ -1,0 +1,27 @@
+Q: recently increasing /4
+D: Results: ['Document -> 2', 'Document -> 3']
+Total Documents: 2
+
+Q: understand devices /6
+D: Results: ['Document -> 2']
+Total Documents: 1
+
+Q: heart
+D: Results: ['Document -> 1', 'Document -> 3', 'Document -> 7', 'Document -> 8', 'Document -> 9', 'Document -> 11', 'Document -> 26']
+Total Documents: 7
+
+Q: tubing
+D: Results: []
+Total Documents: 0
+
+Q: feature AND heart
+D: Results: ['Document -> 1', 'Document -> 26', 'Document -> 7', 'Document -> 8']
+Total Documents: 4
+
+Q: feature AND selection
+D: Results: ['Document -> 7', 'Document -> 8', 'Document -> 12', 'Document -> 15', 'Document -> 16', 'Document -> 21', 'Document -> 22', 'Document -> 23', 'Document -> 24', 'Document -> 25', 'Document -> 26']
+Total Documents: 11
+
+Q: heart AND attack \4
+D: Results: []
+Total Documents: 0

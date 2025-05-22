@@ -1,0 +1,50 @@
+df1.set_index("Unnamed: 0") // input column name
+
+//merging on index 
+pd.merge(df3, df4, left_index=True, right_index=True, how='outer')
+
+df7.reset_index(drop=True)
+
+
+//replace any string to NAN
+df7.replace(to_replace=r'^[a-zA-Z ]+$', value=np.nan, regex=True)
+
+# Fill all missing values with the mean of the particular column
+df.fillna(df.mean())
+
+# Fill any missing value in column 'A' with the column median
+df['A'].fillna(df['A'].median())
+
+# Fill any missing value in column 'Depeche' with the column mode
+df['Depeche'].fillna(df['Depeche'].mode())
+
+//rename col
+df.rename(columns={"Visitors":"Users"})
+
+# Drop the columns where all elements are missing values:
+df.dropna(axis=1, how='all')
+
+# Drop the columns where any of the elements are missing values
+df.dropna(axis=1, how='any')
+
+# Keep only the rows which contain 2 missing values maximum
+df.dropna(thresh=2)
+
+----------------------------------------------------------
+//Statistics of non-numerical features
+df.describe(include=['object', 'bool'])
+
+//sort
+df.sort_values(by=‘total day charge', ascending=False).head()
+
+//Lambda function:
+//If we need to select all states starting with W, we can do it like this:
+df[df[‘state'].apply(lambda state: state[0] == 'W')].head()
+
+//group by
+columns_to_show = ['total day minutes', 'total eve minutes','total night minutes']
+
+df.groupby(['churn'])[columns_to_show].agg([np.mean, np.std, np.min, np.max])
+
+//crosstab contingency table
+pd.crosstab(df['churn'], df['international plan'], margins=True)

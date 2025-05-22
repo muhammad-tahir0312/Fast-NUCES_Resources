@@ -1,0 +1,462 @@
+KNN
+
+# 1. KNN with data split
+
+import pandas
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
+
+names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
+dataset = pandas.read_csv("iris.csv", names=names, header=None)
+dataset = dataset.iloc[1:]
+print("Data set size: ", dataset.shape)
+print("Class distribution: \n", dataset.groupby('class').size())
+
+array = dataset.values
+X = array[:,0:4]
+Y = array[:,4]
+t_size = 0.20
+seed = 7
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=t_size, random_state=seed)
+
+knn = KNeighborsClassifier()
+knn.fit(X_train, Y_train)
+predictions = knn.predict(X_test)
+
+print("Accuracy: ", accuracy_score(Y_test, predictions))
+print("Confusion Matrix: \n", confusion_matrix(Y_test, predictions))
+print("Classification Report: \n", classification_report(Y_test, predictions))
+
+for k in range(1, 11):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, Y_train)
+    predictions = knn.predict(X_test)
+    print(f"Accuracy with k={k}: {accuracy_score(Y_test, predictions)}")
+
+for seed_value in range(1, 11):
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=t_size, random_state=seed_value)
+    knn = KNeighborsClassifier()
+    knn.fit(X_train, Y_train)
+    predictions = knn.predict(X_test)
+    print(f"Accuracy with seed={seed_value}: {accuracy_score(Y_test, predictions)}")
+
+------------------------------------------------------------------------------------------------------------
+
+# 2. KNN without data split
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
+
+train_data = pd.read_csv("datatraining.txt")
+test_data = pd.read_csv("datatest.txt")
+test2_data = pd.read_csv("datatest2.txt")
+
+train_data = train_data.drop('date', axis=1)
+test_data = test_data.drop('date', axis=1)
+test2_data = test2_data.drop('date', axis=1)
+
+X_train = train_data.iloc[:, :-1].values
+Y_train = train_data.iloc[:, -1].values
+
+X_test = test_data.iloc[:, :-1].values
+Y_test = test_data.iloc[:, -1].values
+
+X_test2 = test2_data.iloc[:, :-1].values
+Y_test2 = test2_data.iloc[:, -1].values
+
+knn = KNeighborsClassifier()
+knn.fit(X_train, Y_train)
+
+predictions_test = knn.predict(X_test)
+predictions_test2 = knn.predict(X_test2)
+
+print("Test Data Metrics:")
+print("Accuracy: ", accuracy_score(Y_test, predictions_test))
+print("Confusion Matrix: \n", confusion_matrix(Y_test, predictions_test))
+print("Classification Report: \n", classification_report(Y_test, predictions_test))
+
+print("Test2 Data Metrics:")
+print("Accuracy: ", accuracy_score(Y_test2, predictions_test2))
+print("Confusion Matrix: \n", confusion_matrix(Y_test2, predictions_test2))
+print("Classification Report: \n", classification_report(Y_test2, predictions_test2))
+
+print("\nTest Data with Different k Values:")
+for k in range(1, 11):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, Y_train)
+    predictions_test = knn.predict(X_test)
+    print(f"Accuracy with k={k} (Test): {accuracy_score(Y_test, predictions_test)}")
+
+print("\nTest2 Data with Different k Values:")
+for k in range(1, 11):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, Y_train)
+    predictions_test2 = knn.predict(X_test2)
+    print(f"Accuracy with k={k} (Test2): {accuracy_score(Y_test2, predictions_test2)}")
+
+------------------------------------------------------------------------------------------------------------
+
+NB:
+
+# 1. NB with data split
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+dataset = pd.read_csv('Social_Network_Ads.csv')
+X = dataset.iloc[:, [2, 3]].values
+y = dataset.iloc[:, -1].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
+
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+
+y_pred = classifier.predict(X_test)
+
+ac = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+
+------------------------------------------------------------------------------------------------------------
+
+# 2. NB without data split
+
+import pandas as pd
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+train_data = pd.read_csv('train-data.csv')
+test_data = pd.read_csv('test-data.csv')
+
+print('Shape of training data:', train_data.shape)
+print('Shape of testing data:', test_data.shape)
+
+train_x = train_data.drop(columns=['Survived'], axis=1)
+train_y = train_data['Survived']
+test_x = test_data.drop(columns=['Survived'], axis=1)
+test_y = test_data['Survived']
+
+model = GaussianNB()
+model.fit(train_x, train_y)
+
+predict_train = model.predict(train_x)
+print('Target on train data:', predict_train)
+accuracy_train = accuracy_score(train_y, predict_train)
+print('accuracy_score on train dataset:', accuracy_train)
+
+predict_test = model.predict(test_x)
+print('Target on test data:', predict_test)
+accuracy_test = accuracy_score(test_y, predict_test)
+print('accuracy_score on test dataset:', accuracy_test)
+
+------------------------------------------------------------------------------------------------------------
+
+KMeans:
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_blobs
+from sklearn.metrics import silhouette_score
+
+data = pd.read_csv("Wholesale customers data.csv")
+data.describe()
+
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(data)
+pd.DataFrame(data_scaled).describe()
+
+SSE = []
+for k in range(1,11):
+    kmeans = KMeans(n_clusters=k, init='k-means++')
+    kmeans.fit(data_scaled)
+    SSE.append(kmeans.inertia_)
+
+
+plt.plot(range(1,11), SSE)
+plt.xlabel('Number of clusters')
+plt.ylabel('Inertia')
+plt.show()
+
+kmeans = KMeans(n_clusters=5, init='k-means++')
+kmeans.fit(data_scaled)
+pred = kmeans.predict(data_scaled)
+
+features, true_labels = make_blobs(n_samples=200, centers=3, cluster_std=2.75, random_state=42)
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(features)
+
+kmeans = KMeans(init="random", n_clusters=3, n_init=10, max_iter=300, random_state=42)
+kmeans.fit(scaled_features)
+
+kmeans_kwargs = {"init": "random", "n_init": 10, "max_iter": 300, "random_state": 42}
+sse = []
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, **kmeans_kwargs)
+    kmeans.fit(scaled_features)
+    sse.append(kmeans.inertia_)
+
+plt.style.use("fivethirtyeight")
+plt.plot(range(1, 11), sse)
+plt.xticks(range(1, 11))
+plt.xlabel("Number of Clusters")
+plt.ylabel("SSE")
+plt.show()
+
+
+#VIEW KMEANS CLUSTERS
+sns.scatterplot(x=data_scaled[:, 0], y=data_scaled[:, 2], hue=pred, palette='viridis', legend='full')
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=300, c='red', label='Centroids', marker='X')
+plt.title("KMeans Clustering Visualization with 5 Clusters")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.legend()
+plt.show()
+
+------------------------------------------------------------------------------------------------------------
+
+1. LR
+
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn import preprocessing
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+np.random.seed(0)
+
+X = 2.5 * np.random.randn(100) + 1.5
+res = 0.5 * np.random.randn(100)
+y = 2 + 0.3 * X + res
+
+df = pd.DataFrame({'X': X, 'y': y})
+x_mean = np.mean(X)
+y_mean = np.mean(y)
+
+df['xycov'] = (df['X'] - x_mean) * (df['y'] - y_mean)
+df['xvar'] = (df['X'] - x_mean)**2
+beta = df['xycov'].sum() / df['xvar'].sum()
+alpha = y_mean - (beta * x_mean)
+
+print(f"alpha = {alpha}")
+print(f"beta = {beta}")
+
+advert = pd.read_csv('advertising.csv')
+predictors = ['TV', 'Radio', 'Newspaper']
+X = advert[predictors]
+y = advert['Sales']
+
+lm = LinearRegression()
+model = lm.fit(X, y)
+print(f"alpha = {model.intercept_}")
+print(f"betas = {model.coef_}")
+
+new_X = [[230, 37, 69]]
+print(model.predict(new_X))
+
+weather = ['Sunny', 'Sunny', 'Overcast', 'Rainy', 'Rainy', 'Rainy', 'Overcast', 'Sunny', 'Sunny', 'Rainy', 'Sunny', 'Overcast', 'Overcast', 'Rainy']
+temp = ['Hot', 'Hot', 'Hot', 'Mild', 'Cool', 'Cool', 'Cool', 'Mild', 'Cool', 'Mild', 'Mild', 'Mild', 'Hot', 'Mild']
+play = ['No', 'No', 'Yes', 'Yes', 'Yes', 'No', 'Yes', 'No', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'No']
+
+le = preprocessing.LabelEncoder()
+weather_encoded = le.fit_transform(weather)
+temp_encoded = le.fit_transform(temp)
+label = le.fit_transform(play)
+
+features = list(zip(weather_encoded, temp_encoded))
+model = GaussianNB()
+model.fit(features, label)
+print(model.predict([[0, 2]]))
+
+train_data = pd.read_csv('train-data.csv')
+test_data = pd.read_csv('test-data.csv')
+train_x = train_data.drop(columns=['Survived'], axis=1)
+train_y = train_data['Survived']
+test_x = test_data.drop(columns=['Survived'], axis=1)
+test_y = test_data['Survived']
+
+model = GaussianNB()
+model.fit(train_x, train_y)
+predict_train = model.predict(train_x)
+predict_test = model.predict(test_x)
+accuracy_train = accuracy_score(train_y, predict_train)
+accuracy_test = accuracy_score(test_y, predict_test)
+print(f"Accuracy on Train Data: {accuracy_train}")
+print(f"Accuracy on Test Data: {accuracy_test}")
+
+------------------------------------------------------------------------------------------------------------
+
+2. K-Fold LR
+
+import pandas as pd
+from sklearn.model_selection import train_test_split, KFold, cross_val_score
+from sklearn.linear_model import LinearRegression
+from numpy import mean, absolute, sqrt
+
+df = pd.DataFrame({'y': [6, 8, 12, 14, 14, 15, 17, 22, 24, 23],
+                   'x1': [2, 5, 4, 3, 4, 6, 7, 5, 8, 9],
+                   'x2': [14, 12, 12, 13, 7, 8, 7, 4, 6, 5]})
+
+X = df[['x1', 'x2']]
+y = df['y']
+
+cv = KFold(n_splits=10, random_state=1, shuffle=True)
+model = LinearRegression()
+scores = cross_val_score(model, X, y, scoring='neg_mean_absolute_error', cv=cv, n_jobs=-1)
+mean_absolute_error = mean(absolute(scores))
+
+X = df[['x1', 'x2']]
+y = df['y']
+cv = KFold(n_splits=5, random_state=1, shuffle=True)
+model = LinearRegression()
+scores = cross_val_score(model, X, y, scoring='neg_mean_squared_error', cv=cv, n_jobs=-1)
+rmse = sqrt(mean(absolute(scores)))
+
+------------------------------------------------------------------------------------------------------------
+
+PCA:
+
+from numpy import array
+from numpy.linalg import eig
+import numpy as np
+
+matrix = array([
+    [5, 4, 11, 10, 5, 4, 7, 9, 1, 3],
+    [4, 5, 10, 11, 5, 3, 8, 10, 2, 4],
+    [11, 10, 25, 24, 2, 3, 12, 15, 5, 6],
+    [10, 11, 24, 25, 4, 5, 14, 16, 7, 8],
+    [7, 8, 17, 18, 9, 10, 19, 20, 11, 12],
+    [9, 10, 20, 21, 12, 13, 22, 23, 14, 15],
+    [1, 2, 5, 6, 3, 4, 7, 8, 9, 10],
+    [3, 4, 7, 8, 5, 6, 11, 12, 13, 14]
+])
+
+print("Original Matrix:")
+print(matrix)
+
+matrix_transpose = matrix.T
+print("\nMatrix Transpose:")
+print(matrix_transpose)
+
+covariance_matrix = np.matmul(matrix, matrix_transpose)
+print("\nCovariance Matrix:")
+print(covariance_matrix)
+
+eigenvalues, eigenvectors = eig(covariance_matrix)
+print("\nEigenvalues:")
+print(eigenvalues)
+print("\nEigenvectors:")
+print(eigenvectors)
+
+sorted_eigenvalues = np.sort(eigenvalues)
+print("\nSorted Eigenvalues:")
+print(sorted_eigenvalues)
+
+principal_components = np.delete(eigenvectors, 3, axis=1)
+print("\nPrincipal Components:")
+print(principal_components)
+
+appended_components = np.pad(principal_components, ((0, 2), (0, 0)), mode='constant')
+print("\nAppended Components:")
+print(appended_components)
+
+pca = np.matmul(matrix, appended_components)
+print("\nPCA Transformation:")
+print(pca)
+
+u, singular_values, v = np.linalg.svd(matrix, full_matrices=True)
+print("\nSVD:")
+print("U:")
+print(u.shape)
+print(u)
+print("Singular Values:")
+print(singular_values.shape)
+print(singular_values)
+print("V:")
+print(v.shape)
+print(v)
+
+------------------------------------------------------------------------------------------------------------
+
+SVC:
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+
+actual = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1]
+predicted = [1, 0, 0, 1, 0, 0, 0, 1, 0, 0]
+
+matrix = confusion_matrix(actual, predicted, labels=[1, 0])
+print('Confusion Matrix:\n', matrix)
+
+tp, fn, fp, tn = matrix.ravel()
+print('Outcome values: TP:', tp, 'FN:', fn, 'FP:', fp, 'TN:', tn)
+
+print('Classification Report:\n', classification_report(actual, predicted, labels=[1, 0]))
+
+df = pd.read_csv("iris.csv")
+
+print(df.head())
+print("Data types:\n", df.dtypes)
+
+print("Class distribution:\n", df['Species'].value_counts())
+
+X = df.drop(['Species'], axis=1)
+y = df['Species']
+
+print("Features shape:", X.shape)
+print("Target shape:", y.shape)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+print("X_train shape:", X_train.shape)
+print("y_train shape:", y_train.shape)
+print("X_test shape:", X_test.shape)
+print("y_test shape:", y_test.shape)
+
+svc_clf = SVC(kernel='linear').fit(X_train, y_train)
+
+y_pred_svc = svc_clf.predict(X_test)
+
+cm_svc = confusion_matrix(y_test, y_pred_svc)
+print("SVC Confusion Matrix:\n", cm_svc)
+
+cm_svc_df = pd.DataFrame(cm_svc, index=['SETOSA', 'VERSICOLR', 'VIRGINICA'], columns=['SETOSA', 'VERSICOLR', 'VIRGINICA'])
+plt.figure(figsize=(5, 4))
+sns.heatmap(cm_svc_df, annot=True)
+plt.title('SVC Confusion Matrix')
+plt.ylabel('Actual Values')
+plt.xlabel('Predicted Values')
+plt.show()
+
+knn_clf = KNeighborsClassifier(n_neighbors=3).fit(X_train, y_train)
+
+y_pred_knn = knn_clf.predict(X_train)
+print("KNN Predictions on training set:\n", y_pred_knn)
+

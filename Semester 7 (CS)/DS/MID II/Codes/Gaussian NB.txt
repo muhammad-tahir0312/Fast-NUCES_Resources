@@ -1,0 +1,59 @@
+# 1. NB with data split
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+dataset = pd.read_csv('Social_Network_Ads.csv')
+X = dataset.iloc[:, [2, 3]].values
+y = dataset.iloc[:, -1].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
+
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+
+y_pred = classifier.predict(X_test)
+
+ac = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+
+------------------------------------------------------------------------------------------------
+
+# 2. NB without data split
+
+import pandas as pd
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+train_data = pd.read_csv('train-data.csv')
+test_data = pd.read_csv('test-data.csv')
+
+print('Shape of training data:', train_data.shape)
+print('Shape of testing data:', test_data.shape)
+
+train_x = train_data.drop(columns=['Survived'], axis=1)
+train_y = train_data['Survived']
+test_x = test_data.drop(columns=['Survived'], axis=1)
+test_y = test_data['Survived']
+
+model = GaussianNB()
+model.fit(train_x, train_y)
+
+predict_train = model.predict(train_x)
+print('Target on train data:', predict_train)
+accuracy_train = accuracy_score(train_y, predict_train)
+print('accuracy_score on train dataset:', accuracy_train)
+
+predict_test = model.predict(test_x)
+print('Target on test data:', predict_test)
+accuracy_test = accuracy_score(test_y, predict_test)
+print('accuracy_score on test dataset:', accuracy_test)

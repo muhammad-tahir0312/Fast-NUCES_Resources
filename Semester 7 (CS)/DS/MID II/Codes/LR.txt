@@ -1,0 +1,114 @@
+1. LR
+
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn import preprocessing
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+np.random.seed(0)
+
+X = 2.5 * np.random.randn(100) + 1.5
+res = 0.5 * np.random.randn(100)
+y = 2 + 0.3 * X + res
+
+df = pd.DataFrame({'X': X, 'y': y})
+x_mean = np.mean(X)
+y_mean = np.mean(y)
+
+df['xycov'] = (df['X'] - x_mean) * (df['y'] - y_mean)
+df['xvar'] = (df['X'] - x_mean)**2
+beta = df['xycov'].sum() / df['xvar'].sum()
+alpha = y_mean - (beta * x_mean)
+
+print(f"alpha = {alpha}")
+print(f"beta = {beta}")
+
+advert = pd.read_csv('advertising.csv')
+predictors = ['TV', 'Radio', 'Newspaper']
+X = advert[predictors]
+y = advert['Sales']
+
+lm = LinearRegression()
+model = lm.fit(X, y)
+print(f"alpha = {model.intercept_}")
+print(f"betas = {model.coef_}")
+
+new_X = [[230, 37, 69]]
+print(model.predict(new_X))
+
+# Plot the regression line across the full dataset range
+#plt.figure(figsize=(10, 6))
+#plt.scatter(X, y, color='blue', label='Data Points')
+
+# Generate predictions for the entire dataset's X values to show the regression line
+#y_line = model.predict(X)
+#plt.plot(X, y_line, color='red', linewidth=2, label='Regression Line')
+
+#plt.title("Linear Relationship between Glucose and Blood Pressure")
+#plt.xlabel("Glucose")
+#plt.ylabel("Blood Pressure")
+#plt.legend()
+#plt.show()
+
+------------------------------------------------------------------------------------------------------
+
+weather = ['Sunny', 'Sunny', 'Overcast', 'Rainy', 'Rainy', 'Rainy', 'Overcast', 'Sunny', 'Sunny', 'Rainy', 'Sunny', 'Overcast', 'Overcast', 'Rainy']
+temp = ['Hot', 'Hot', 'Hot', 'Mild', 'Cool', 'Cool', 'Cool', 'Mild', 'Cool', 'Mild', 'Mild', 'Mild', 'Hot', 'Mild']
+play = ['No', 'No', 'Yes', 'Yes', 'Yes', 'No', 'Yes', 'No', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'No']
+
+le = preprocessing.LabelEncoder()
+weather_encoded = le.fit_transform(weather)
+temp_encoded = le.fit_transform(temp)
+label = le.fit_transform(play)
+
+features = list(zip(weather_encoded, temp_encoded))
+model = GaussianNB()
+model.fit(features, label)
+print(model.predict([[0, 2]]))
+
+train_data = pd.read_csv('train-data.csv')
+test_data = pd.read_csv('test-data.csv')
+train_x = train_data.drop(columns=['Survived'], axis=1)
+train_y = train_data['Survived']
+test_x = test_data.drop(columns=['Survived'], axis=1)
+test_y = test_data['Survived']
+
+model = GaussianNB()
+model.fit(train_x, train_y)
+predict_train = model.predict(train_x)
+predict_test = model.predict(test_x)
+accuracy_train = accuracy_score(train_y, predict_train)
+accuracy_test = accuracy_score(test_y, predict_test)
+print(f"Accuracy on Train Data: {accuracy_train}")
+print(f"Accuracy on Test Data: {accuracy_test}")
+
+-----------------------------------------------------------------------------------------------
+
+2. K-Fold LR
+
+import pandas as pd
+from sklearn.model_selection import train_test_split, KFold, cross_val_score
+from sklearn.linear_model import LinearRegression
+from numpy import mean, absolute, sqrt
+
+df = pd.DataFrame({'y': [6, 8, 12, 14, 14, 15, 17, 22, 24, 23],
+                   'x1': [2, 5, 4, 3, 4, 6, 7, 5, 8, 9],
+                   'x2': [14, 12, 12, 13, 7, 8, 7, 4, 6, 5]})
+
+X = df[['x1', 'x2']]
+y = df['y']
+
+cv = KFold(n_splits=10, random_state=1, shuffle=True)
+model = LinearRegression()
+scores = cross_val_score(model, X, y, scoring='neg_mean_absolute_error', cv=cv, n_jobs=-1)
+mean_absolute_error = mean(absolute(scores))
+
+X = df[['x1', 'x2']]
+y = df['y']
+cv = KFold(n_splits=5, random_state=1, shuffle=True)
+model = LinearRegression()
+scores = cross_val_score(model, X, y, scoring='neg_mean_squared_error', cv=cv, n_jobs=-1)
+rmse = sqrt(mean(absolute(scores)))

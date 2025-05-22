@@ -1,0 +1,59 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+
+actual = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1]
+predicted = [1, 0, 0, 1, 0, 0, 0, 1, 0, 0]
+
+matrix = confusion_matrix(actual, predicted, labels=[1, 0])
+print('Confusion Matrix:\n', matrix)
+
+tp, fn, fp, tn = matrix.ravel()
+print('Outcome values: TP:', tp, 'FN:', fn, 'FP:', fp, 'TN:', tn)
+
+print('Classification Report:\n', classification_report(actual, predicted, labels=[1, 0]))
+
+df = pd.read_csv("iris.csv")
+
+print(df.head())
+print("Data types:\n", df.dtypes)
+
+print("Class distribution:\n", df['Species'].value_counts())
+
+X = df.drop(['Species'], axis=1)
+y = df['Species']
+
+print("Features shape:", X.shape)
+print("Target shape:", y.shape)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+print("X_train shape:", X_train.shape)
+print("y_train shape:", y_train.shape)
+print("X_test shape:", X_test.shape)
+print("y_test shape:", y_test.shape)
+
+svc_clf = SVC(kernel='linear').fit(X_train, y_train)
+
+y_pred_svc = svc_clf.predict(X_test)
+
+cm_svc = confusion_matrix(y_test, y_pred_svc)
+print("SVC Confusion Matrix:\n", cm_svc)
+
+cm_svc_df = pd.DataFrame(cm_svc, index=['SETOSA', 'VERSICOLR', 'VIRGINICA'], columns=['SETOSA', 'VERSICOLR', 'VIRGINICA'])
+plt.figure(figsize=(5, 4))
+sns.heatmap(cm_svc_df, annot=True)
+plt.title('SVC Confusion Matrix')
+plt.ylabel('Actual Values')
+plt.xlabel('Predicted Values')
+plt.show()
+
+knn_clf = KNeighborsClassifier(n_neighbors=3).fit(X_train, y_train)
+
+y_pred_knn = knn_clf.predict(X_train)
+print("KNN Predictions on training set:\n", y_pred_knn)
